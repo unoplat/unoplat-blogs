@@ -1,0 +1,80 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection, getEntry } from 'astro:content';
+import BaseHead from '@/components/BaseHead.astro';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/Header.astro';
+import PostCard from '@/components/PostCard.astro';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { SITE_DESCRIPTION } from '@/consts';
+
+export const getStaticPaths = (async () => {
+	const allPosts = await getCollection('blog', ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
+
+	const uniqueTags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+
+	return uniqueTags.map((tag) => {
+		const filteredPosts = allPosts.filter((post) => post.data.tags.includes(tag));
+
+		return {
+			params: { tag },
+			props: { posts: filteredPosts },
+		};
+	});
+}) satisfies GetStaticPaths;
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+
+const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsWithAuthors = await Promise.all(
+	sortedPosts.map(async (post) => ({
+		post,
+		author: await getEntry(post.data.author),
+	}))
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Posts tagged with ${tag}`} description={`${SITE_DESCRIPTION} - Posts tagged with ${tag}`} />
+	</head>
+	<body>
+		<Header />
+		<main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+			<section class="space-y-8">
+				<div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+					<div class="space-y-2">
+						<p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Tag</p>
+						<h1 class="text-3xl font-semibold text-foreground sm:text-4xl">
+							Posts tagged with
+						</h1>
+						<div class="flex flex-wrap items-center gap-3">
+							<Badge variant="secondary" className="rounded-full px-4 py-1 text-sm font-semibold">
+								{tag}
+							</Badge>
+							<span class="text-sm text-muted-foreground">
+								{postsWithAuthors.length} {postsWithAuthors.length === 1 ? 'post' : 'posts'}
+							</span>
+						</div>
+					</div>
+					<Button asChild variant="outline" size="sm">
+						<a href="/tags">All tags</a>
+					</Button>
+				</div>
+
+				<div class="grid gap-6 md:grid-cols-2">
+					{postsWithAuthors.map(({ post, author }) => (
+						<PostCard post={post} author={author} />
+					))}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

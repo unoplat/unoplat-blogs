@@ -1,0 +1,7 @@
+---
+import { SiteHeader } from '@/components/SiteHeader';
+
+const pathname = Astro.url.pathname;
+---
+
+<SiteHeader client:load pathname={pathname} />

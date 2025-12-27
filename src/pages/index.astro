@@ -1,0 +1,72 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import BaseHead from '@/components/BaseHead.astro';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/Header.astro';
+import PostCard from '@/components/PostCard.astro';
+import { Button } from '@/components/ui/button';
+import { SITE_DESCRIPTION, SITE_TITLE } from '@/consts';
+
+const posts = (await getCollection('blog', ({ data }) => {
+	return import.meta.env.PROD ? data.draft !== true : true;
+})).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const postsWithAuthors = await Promise.all(
+	posts.map(async (post) => ({
+		post,
+		author: await getEntry(post.data.author),
+	}))
+);
+
+const featured = postsWithAuthors[0];
+const latest = postsWithAuthors.slice(1, 5);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+			<section class="space-y-8">
+				<div class="rounded-2xl border border-border/60 bg-card/70 px-8 py-10 shadow-sm">
+					<p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Unoplat Blog</p>
+					<p class="mt-4 max-w-2xl text-lg text-muted-foreground sm:text-xl">
+						{SITE_DESCRIPTION}
+					</p>
+				</div>
+
+				{featured && (
+					<div class="space-y-4">
+						<div class="flex flex-wrap items-center justify-between gap-3">
+							<h2 class="text-2xl font-semibold text-foreground">Featured</h2>
+							<Button asChild variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+								<a href="/blog">View all posts</a>
+							</Button>
+						</div>
+						<div class="grid gap-6">
+							<PostCard post={featured.post} author={featured.author} imagePriority />
+						</div>
+					</div>
+				)}
+
+				<div class="space-y-4">
+					<div class="flex flex-wrap items-center justify-between gap-3">
+						<h2 class="text-2xl font-semibold text-foreground">Latest</h2>
+						<Button asChild variant="outline" size="sm">
+							<a href="/tags">Browse tags</a>
+						</Button>
+					</div>
+					<div class="grid gap-6 md:grid-cols-2">
+						{latest.map(({ post, author }) => (
+							<PostCard post={post} author={author} imageLoading="eager" />
+						))}
+					</div>
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>

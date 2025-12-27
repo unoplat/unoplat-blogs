@@ -1,0 +1,180 @@
+---
+import { Image } from "astro:assets";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { SITE_DESCRIPTION, SOCIAL_LINKS } from "@/consts";
+
+const today = new Date();
+---
+
+<footer class="border-t border-border/60 bg-background">
+    <div class="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-10 sm:px-6">
+        <div
+            class="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between"
+        >
+            <div class="space-y-3">
+                <a href="/" class="flex items-center text-foreground">
+                    <Image
+                        src="/images/unoplat_logo.png"
+                        alt="Unoplat Blog"
+                        width={133}
+                        height={36}
+                        class="h-9 w-auto dark:brightness-180 dark:saturate-140"
+                    />
+                </a>
+                <p class="max-w-sm text-sm text-muted-foreground">
+                    {SITE_DESCRIPTION}
+                </p>
+                <p class="text-xs text-muted-foreground">
+                    &copy; {today.getFullYear()} Unoplat. All rights reserved.
+                </p>
+            </div>
+
+            <div class="flex flex-col gap-8 sm:flex-row sm:gap-12">
+                <div class="space-y-2">
+                    <p
+                        class="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                    >
+                        Explore
+                    </p>
+                    <div class="flex flex-col gap-1">
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="sm"
+                            className="justify-start px-2 text-muted-foreground hover:text-foreground"
+                        >
+                            <a href="/">Home</a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="sm"
+                            className="justify-start px-2 text-muted-foreground hover:text-foreground"
+                        >
+                            <a href="/blog">Blog</a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="sm"
+                            className="justify-start px-2 text-muted-foreground hover:text-foreground"
+                        >
+                            <a href="/tags">Tags</a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="sm"
+                            className="justify-start px-2 text-muted-foreground hover:text-foreground"
+                        >
+                            <a href="/about">About</a>
+                        </Button>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <p
+                        class="text-xs font-semibold uppercase tracking-widest text-muted-foreground"
+                    >
+                        Social
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            <a
+                                href={SOCIAL_LINKS.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Unoplat on GitHub"
+                            >
+                                <Image
+                                    src="/images/social/github-mark.svg"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                    class="size-4 dark:invert"
+                                />
+                            </a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            <a
+                                href={SOCIAL_LINKS.discord}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Join Unoplat Discord"
+                            >
+                                <Image
+                                    src="/images/social/Discord-Symbol-Blurple.svg"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                    class="size-4"
+                                />
+                            </a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            <a
+                                href={SOCIAL_LINKS.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Unoplat on LinkedIn"
+                            >
+                                <Image
+                                    src="/images/social/LI-In-Bug.png"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                    class="size-4"
+                                />
+                            </a>
+                        </Button>
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            <a
+                                href={SOCIAL_LINKS.twitter}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Unoplat on X (Twitter)"
+                            >
+                                <Image
+                                    src="/images/social/x-logo.svg"
+                                    alt=""
+                                    width={16}
+                                    height={16}
+                                    class="size-4 dark:invert"
+                                />
+                            </a>
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <Separator className="my-2" />
+        <div
+            class="flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+        >
+            <span>Built with Astro and Tailwind.</span>
+            <span>Open source dev tooling for Unoplat builders.</span>
+        </div>
+    </div>
+</footer>

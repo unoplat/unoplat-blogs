@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import FormattedDate from '@/components/FormattedDate.astro';
+import TagList from '@/components/TagList.astro';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { AuthorAvatar } from '@/components/AuthorAvatar';
+import { Card, CardContent } from '@/components/ui/card';
+
+interface Props {
+	post: CollectionEntry<'blog'>;
+	author?: CollectionEntry<'authors'>;
+	imageLoading?: 'lazy' | 'eager';
+	imagePriority?: boolean;
+}
+
+const { post, author, imageLoading = 'lazy', imagePriority = false } = Astro.props;
+---
+
+<Card className="group relative overflow-hidden border-border/60 bg-card/80 shadow-sm transition-shadow hover:shadow-md">
+	<a href={`/blog/${post.id}/`} class="absolute inset-0 z-0" aria-label={`Read ${post.data.title}`}>
+		<span class="sr-only">Read more</span>
+	</a>
+	{post.data.heroImage && (
+		<AspectRatio ratio={16 / 9}>
+			<Image
+				width={960}
+				height={540}
+				src={post.data.heroImage}
+				alt={post.data.title}
+				class="h-full w-full object-cover transition-transform group-hover:scale-[1.02]"
+				loading={imagePriority ? undefined : imageLoading}
+				priority={imagePriority ? true : undefined}
+			/>
+		</AspectRatio>
+	)}
+	<CardContent className="space-y-3">
+		<div class="space-y-2">
+			<h3 class="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
+				{post.data.title}
+			</h3>
+			<p class="text-sm text-muted-foreground">{post.data.description}</p>
+		</div>
+		{post.data.tags?.length ? (
+			<div class="relative z-10">
+				<TagList tags={post.data.tags} />
+			</div>
+		) : null}
+		<div class="flex flex-wrap items-center justify-between gap-3 text-xs text-muted-foreground">
+			<div class="flex items-center gap-2">
+				{author && (
+					<AuthorAvatar
+						client:load
+						src={author.data.avatar}
+						name={author.data.name}
+						size="sm"
+					/>
+				)}
+				<span class="text-sm font-medium text-foreground">{author?.data.name ?? 'Unoplat'}</span>
+			</div>
+			<span class="text-xs uppercase tracking-widest">
+				<FormattedDate date={post.data.pubDate} />
+			</span>
+		</div>
+	</CardContent>
+</Card>

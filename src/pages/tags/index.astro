@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '@/components/BaseHead.astro';
+import Footer from '@/components/Footer.astro';
+import Header from '@/components/Header.astro';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { SITE_DESCRIPTION } from '@/consts';
+
+const allPosts = await getCollection('blog', ({ data }) => {
+	return import.meta.env.PROD ? data.draft !== true : true;
+});
+
+const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
+const tagCounts = new Map<string, number>();
+allPosts.forEach((post) => {
+	post.data.tags.forEach((tag) => {
+		tagCounts.set(tag, (tagCounts.get(tag) || 0) + 1);
+	});
+});
+
+const sortedTags = tags.sort((a, b) => a.localeCompare(b));
+const pageTitle = 'All Tags';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={pageTitle} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="mx-auto max-w-6xl px-4 py-12 sm:px-6">
+			<section class="space-y-8">
+				<div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+					<div class="space-y-2">
+						<p class="text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">Tags</p>
+						<h1 class="text-3xl font-semibold text-foreground sm:text-4xl">Browse by topic</h1>
+						<p class="max-w-2xl text-sm text-muted-foreground">
+							Find deep dives, quick hits, and product updates grouped by topic.
+						</p>
+					</div>
+					<Button asChild variant="outline" size="sm">
+						<a href="/blog">All posts</a>
+					</Button>
+				</div>
+
+				<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{sortedTags.map((tag) => (
+						<a href={`/tags/${tag}/`} class="group">
+							<Card className="h-full border-border/60 bg-card/80 transition group-hover:-translate-y-1 group-hover:shadow-md">
+								<CardContent className="flex items-center justify-between">
+									<div class="space-y-1">
+										<p class="text-lg font-semibold text-foreground">{tag}</p>
+										<p class="text-xs text-muted-foreground">
+											{tagCounts.get(tag)} {tagCounts.get(tag) === 1 ? 'post' : 'posts'}
+										</p>
+									</div>
+									<Badge variant="secondary" className="rounded-full">
+										{tagCounts.get(tag)}
+									</Badge>
+								</CardContent>
+							</Card>
+						</a>
+					))}
+				</div>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
