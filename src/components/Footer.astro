@@ -1,7 +1,6 @@
 ---
 import { Image } from "astro:assets";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { SITE_DESCRIPTION, SOCIAL_LINKS } from "@/consts";
 
 const today = new Date();
@@ -169,12 +168,5 @@ const today = new Date();
             </div>
         </div>
 
-        <Separator className="my-2" />
-        <div
-            class="flex flex-col gap-2 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
-        >
-            <span>Built with Astro and Tailwind.</span>
-            <span>Open source dev tooling for Unoplat builders.</span>
-        </div>
     </div>
 </footer>

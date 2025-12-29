@@ -55,14 +55,8 @@ const { title, description, image = FallbackImage } = Astro.props;
     }
   };
 
-  const media = window.matchMedia ? window.matchMedia(mediaQuery) : null;
-  if (media) {
-    if (media.addEventListener) {
-      media.addEventListener("change", handleSystemChange);
-    } else if (media.addListener) {
-      media.addListener(handleSystemChange);
-    }
-  }
+  const media = window.matchMedia?.(mediaQuery);
+  media?.addEventListener("change", handleSystemChange);
 
   document.addEventListener("astro:before-swap", (event) => {
     if (!event || !event.newDocument || !event.newDocument.documentElement) {
