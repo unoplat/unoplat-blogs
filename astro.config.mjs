@@ -9,7 +9,7 @@ import { remarkReadingTime } from './remark-reading-time.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://example.com',
+	site: 'https://blogs.unoplat.io',
 	integrations: [mdx({ remarkPlugins: [remarkReadingTime] }), sitemap(), react()],
 	markdown: {
 		remarkPlugins: [remarkReadingTime],
