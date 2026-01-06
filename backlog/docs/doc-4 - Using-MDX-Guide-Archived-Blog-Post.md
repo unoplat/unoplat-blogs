@@ -1,11 +1,28 @@
 ---
+id: doc-4
+title: Using MDX Guide (Archived Blog Post)
+type: other
+created_date: '2026-01-06 06:44'
+---
+# Using MDX
+
+This was originally a blog post at `/src/content/blog/using-mdx.mdx`.
+
+---
+
+## Original Frontmatter
+```yaml
 title: 'Using MDX'
 description: 'Lorem ipsum dolor sit amet'
 pubDate: 'Jun 01 2024'
 heroImage: '../../assets/blog-placeholder-5.jpg'
 author: jay-ghiya
 tags: ['mdx', 'guide']
+```
+
 ---
+
+## Content
 
 This theme comes with the [@astrojs/mdx](https://docs.astro.build/en/guides/integrations-guide/mdx/) integration installed and configured in your `astro.config.mjs` config file. If you prefer not to use MDX, you can disable support by removing the integration from your config file.
 
@@ -20,11 +37,13 @@ If you have existing content authored in MDX, this integration will hopefully ma
 Here is how you import and use a UI component inside of MDX.  
 When you open this page in the browser, you should see the clickable button below.
 
+```mdx
 import HeaderLink from '../../components/HeaderLink.astro';
 
 <HeaderLink href="#" onclick="alert('clicked!')">
 	Embedded component in MDX
 </HeaderLink>
+```
 
 ## More Links
 

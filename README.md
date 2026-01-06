@@ -53,6 +53,22 @@ All commands are run from the root of the project, from a terminal:
 | `yarn astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `yarn astro -- --help` | Get help using the Astro CLI                     |
 
+## 💬 Comments (Giscus)
+
+This project uses GitHub Discussions via giscus for blog comments.
+Set the following public environment variables (values come from the giscus setup):
+
+```ini
+PUBLIC_GISCUS_REPO=unoplat/unoplat-code-confluence
+PUBLIC_GISCUS_REPO_ID=
+PUBLIC_GISCUS_CATEGORY=
+PUBLIC_GISCUS_CATEGORY_ID=
+PUBLIC_GISCUS_MAPPING=pathname
+PUBLIC_GISCUS_THEME=preferred_color_scheme
+PUBLIC_GISCUS_LANG=en
+PUBLIC_GISCUS_LOADING=lazy
+```
+
 ## 👀 Want to learn more?
 
 Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
