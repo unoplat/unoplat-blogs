@@ -75,7 +75,7 @@ This removes the manual Cypher and ETL loop we hit with Neo4j. For comparison, N
 
 - **Mismatch between needs and tooling** — Graph Schema optimization reduced our max traversal from 8 hops to 4, putting us squarely in SQL join territory.
 - **Operational Complexity** — We carried a JVM Infrastructure stack, separate pooling, and a second schema lifecycle, which reduces our turn around time on any feature, bug or any maintainance work.
-- **Ecosystem alignment** — Postgres offers everything we need: a mature vector ecosystem , native support as a [Temporal persistence backend](https://docs.temporal.io/self-hosted-guide/defaults#postgresql) for our workflow orchestration, a proven foundation for our upcoming security infrastructure. 
+- **Ecosystem alignment** — Postgres offers everything we need: a mature vector ecosystem , native support as a [Temporal persistence backend](https://docs.temporal.io/self-hosted-guide/defaults#postgresql) for our workflow orchestration, a proven foundation for our upcoming security infrastructure and operational metadata that our app needs. 
 - **Optimisation clarity** — Unlike Cypher, SQL optimization draws on decades of publicly available blogs, courses, and case studies. This makes query intent, indexing strategy, and performance tuning decisions easier to learn, reason about, and iterate on.
 
 ### How our data actually gets traversed
