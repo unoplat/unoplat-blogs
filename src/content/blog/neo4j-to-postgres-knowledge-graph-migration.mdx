@@ -55,7 +55,7 @@ Here's proof from production systems:
 | Company | Domain | Results |
 |---------|--------|---------|
 | **Intrinio** | Fintech | 99% of queries at ~120 ms on large, multi-join financial datasets with billions of records |
-| **PushOwl** | E-commerce analytics | 8-second queries → ~200 ms, 95th percentile at 30–40 ms, serving 8,500+ tenants |
+| **PushOwl** | E-commerce analytics | 8-second queries → ~200 ms, [95th percentile](https://sre.google/sre-book/service-level-objectives/) at 30–40 ms, serving 8,500+ tenants |
 | **ConvertFlow** | Marketing analytics | 15–30 second queries → sub-500 ms across hundreds of TB of event data |
 | **Algolia** | Dev tools | 95% of queries under 800 ms while ingesting 5–10 billion rows per day |
 
@@ -73,11 +73,10 @@ This removes the manual Cypher and ETL loop we hit with Neo4j. For comparison, N
 
 ### Why we moved
 
-- **Mismatch between needs and tooling** — Our real-world access patterns have been optimised now to be shallow and predictable, so the graph advantage is not actually needed.
-- **Operational drag** — We carried a JVM Infrastructure stack, separate pooling, and a second schema lifecycle, which increased on-call burden and slowed iteration
-- **Ecosystem alignment** — Postgres is where our embeddings, analytics, and data tooling live, so consolidating reduced glue code and failure modes.
-- **Performance clarity** — SQL made query intent, indexing strategy, and optimization decisions easier to reason about and tune over time
-- **Long-term sustainability** — Feature delivery and Maintenance risks are lower with a ubiquitous relational stack.
+- **Mismatch between needs and tooling** — Graph Schema optimization reduced our max traversal from 8 hops to 4, putting us squarely in SQL join territory.
+- **Operational Complexity** — We carried a JVM Infrastructure stack, separate pooling, and a second schema lifecycle, which reduces our turn around time on any feature, bug or any maintainance work.
+- **Ecosystem alignment** — Postgres offers everything we need: a mature vector ecosystem , native support as a [Temporal persistence backend](https://docs.temporal.io/self-hosted-guide/defaults#postgresql) for our workflow orchestration, a proven foundation for our upcoming security infrastructure. 
+- **Optimisation clarity** — Unlike Cypher, SQL optimization draws on decades of publicly available blogs, courses, and case studies. This makes query intent, indexing strategy, and performance tuning decisions easier to learn, reason about, and iterate on.
 
 ### How our data actually gets traversed
 
