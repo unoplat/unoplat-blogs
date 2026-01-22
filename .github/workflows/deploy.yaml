@@ -42,6 +42,19 @@ jobs:
 
       - name: Build
         run: pnpm run build
+        env:
+          PUBLIC_GISCUS_REPO: unoplat/unoplat-code-confluence
+          PUBLIC_GISCUS_REPO_ID: R_kgDOLpX7Fw
+          PUBLIC_GISCUS_CATEGORY: Announcements
+          PUBLIC_GISCUS_CATEGORY_ID: DIC_kwDOLpX7F84Ce2Lw
+          PUBLIC_GISCUS_MAPPING: pathname
+          PUBLIC_GISCUS_STRICT: "0"
+          PUBLIC_GISCUS_REACTIONS: "1"
+          PUBLIC_GISCUS_EMIT_METADATA: "0"
+          PUBLIC_GISCUS_INPUT_POSITION: bottom
+          PUBLIC_GISCUS_THEME: preferred_color_scheme
+          PUBLIC_GISCUS_LANG: en
+          PUBLIC_GISCUS_LOADING: lazy
 
       - name: Deploy to Cloudflare Pages
         id: deploy

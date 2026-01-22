@@ -49,6 +49,7 @@ const getSystemTheme = (): "light" | "dark" => {
 const applyTheme = (theme: ThemePreference) => {
   const resolvedTheme = theme === "system" ? getSystemTheme() : theme
   document.documentElement.classList.toggle("dark", resolvedTheme === "dark")
+  document.documentElement.setAttribute("data-theme", resolvedTheme)
 }
 
 const getNextTheme = (theme: ThemePreference): ThemePreference => {
