@@ -44,6 +44,7 @@ const { title, description, image = FallbackImage } = Astro.props;
 
   const applyTheme = (theme) => {
     document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.setAttribute("data-theme", theme);
   };
 
   applyTheme(resolveTheme());
@@ -64,6 +65,7 @@ const { title, description, image = FallbackImage } = Astro.props;
     }
 
     const nextTheme = resolveTheme();
+    event.newDocument.documentElement.setAttribute("data-theme", nextTheme);
     if (nextTheme === "dark") {
       event.newDocument.documentElement.classList.add("dark");
     } else {

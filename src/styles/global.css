@@ -310,3 +310,70 @@ input {
     letter-spacing: var(--tracking-normal);
 	}
 }
+
+/*
+  Mermaid ER Diagram Styling - CORRECT SELECTORS FOR MERMAID V11+
+
+  The ER diagram renderer was completely rewritten in Mermaid v11.
+  Old classes (.entityLabel, .attributeBoxEven) NO LONGER EXIST.
+  New classes: g.label.name, g.label.attribute-type, .nodeLabel
+
+  Reference: GitHub Issues #3032, #6142 confirm fontSize config is broken for ER diagrams
+*/
+
+/* ER Diagram Entity Names - Mermaid v11 unified renderer uses g.label.name */
+svg[aria-roledescription="er"] g.label.name,
+svg[aria-roledescription="er"] g.label.name text,
+svg[aria-roledescription="er"] g.label.name tspan,
+svg[aria-roledescription="er"] g.label.name .nodeLabel,
+svg[aria-roledescription="er"] g.label.name span {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+}
+
+/* ER Diagram Attributes - Column labels */
+svg[aria-roledescription="er"] g.label.attribute-type,
+svg[aria-roledescription="er"] g.label.attribute-type text,
+svg[aria-roledescription="er"] g.label.attribute-type .nodeLabel,
+svg[aria-roledescription="er"] g.label.attribute-name,
+svg[aria-roledescription="er"] g.label.attribute-name text,
+svg[aria-roledescription="er"] g.label.attribute-name .nodeLabel,
+svg[aria-roledescription="er"] g.label.attribute-keys,
+svg[aria-roledescription="er"] g.label.attribute-keys text,
+svg[aria-roledescription="er"] g.label.attribute-comment,
+svg[aria-roledescription="er"] g.label.attribute-comment text {
+  font-size: 14px !important;
+}
+
+/* ER Diagram - All nodeLabel elements (used for HTML labels) */
+svg[aria-roledescription="er"] .nodeLabel {
+  font-size: 16px !important;
+}
+
+/* ER Diagram - Relationship labels on connection lines */
+svg[aria-roledescription="er"] .edgeLabel .label,
+svg[aria-roledescription="er"] .edgeLabel .label text {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+}
+
+/* Generic fallback for all text in ER diagrams */
+svg[aria-roledescription="er"] text {
+  font-size: 14px !important;
+}
+
+/* Entity node groups */
+svg[aria-roledescription="er"] g.node.default rect {
+  stroke-width: 2px !important;
+}
+
+/*
+  TRANSFORM SCALE FALLBACK
+  Since fontSize config is broken in Mermaid for ER diagrams (GitHub #3032, #6142),
+  scaling the entire SVG is a reliable workaround.
+*/
+svg[aria-roledescription="er"] {
+  transform: scale(1.3);
+  transform-origin: top left;
+  margin-bottom: 60px;
+}
