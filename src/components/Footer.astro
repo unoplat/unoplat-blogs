@@ -13,13 +13,8 @@ const today = new Date();
         >
             <div class="space-y-3">
                 <a href="/" class="flex items-center text-foreground">
-                    <Image
-                        src="/images/unoplat_logo.png"
-                        alt="Unoplat Blog"
-                        width={133}
-                        height={36}
-                        class="h-9 w-auto dark:brightness-180 dark:saturate-140"
-                    />
+                    <img src="/images/unoplat-logo-light.svg" alt="Unoplat Blog" class="h-7 w-auto dark:hidden" />
+                    <img src="/images/unoplat-logo-dark.svg" alt="Unoplat Blog" class="hidden h-7 w-auto dark:block" />
                 </a>
                 <p class="max-w-sm text-sm text-muted-foreground">
                     {SITE_DESCRIPTION}
@@ -67,7 +62,7 @@ const today = new Date();
                             size="sm"
                             className="justify-start px-2 text-muted-foreground hover:text-foreground"
                         >
-                            <a href="/about">About</a>
+                            <a href={SOCIAL_LINKS.website} target="_blank" rel="noopener noreferrer">About</a>
                         </Button>
                     </div>
                 </div>
@@ -79,6 +74,33 @@ const today = new Date();
                         Social
                     </p>
                     <div class="flex flex-wrap gap-2">
+                        <Button
+                            asChild
+                            variant="ghost"
+                            size="icon"
+                            className="text-muted-foreground hover:text-foreground"
+                        >
+                            <a
+                                href={SOCIAL_LINKS.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label="Unoplat Website"
+                            >
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    class="size-4"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                >
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M2 12h20"></path>
+                                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                </svg>
+                            </a>
+                        </Button>
                         <Button
                             asChild
                             variant="ghost"

@@ -7,6 +7,7 @@ export const SITE_DESCRIPTION =
 
 // Social links configuration
 export const SOCIAL_LINKS = {
+  website: "https://www.unoplat.io",
   github: "https://github.com/unoplat/unoplat-code-confluence",
   discord: "https://discord.gg/xcV9PxpS4J",
   linkedin: "https://www.linkedin.com/company/unoplat/",

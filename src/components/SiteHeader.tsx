@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Menu, Monitor, Moon, Sun } from "lucide-react"
+import { Globe, Menu, Monitor, Moon, Sun } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,11 +12,11 @@ import {
 import { cn } from "@/lib/utils"
 import { SOCIAL_LINKS } from "@/consts"
 
-const navItems = [
+const navItems: { href: string; label: string; external?: boolean }[] = [
   { href: "/", label: "Home" },
   { href: "/blog", label: "Blog" },
   { href: "/tags", label: "Tags" },
-  { href: "/about", label: "About" },
+  { href: "https://www.unoplat.io", label: "About", external: true },
 ]
 
 type ThemePreference = "light" | "dark" | "system"
@@ -157,11 +157,8 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
     <header className="sticky top-0 z-50 border-b border-border/60 bg-background/80 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <a href="/" className="flex items-center text-foreground">
-            <img
-              src="/images/unoplat_logo.png"
-              alt="Unoplat Blog"
-              className="h-9 w-auto dark:brightness-180 dark:saturate-140"
-            />
+            <img src="/images/unoplat-logo-light.svg" alt="Unoplat Blog" className="h-7 w-auto dark:hidden" />
+            <img src="/images/unoplat-logo-dark.svg" alt="Unoplat Blog" className="hidden h-7 w-auto dark:block" />
         </a>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -173,12 +170,17 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
               size="sm"
               className={cn(
                 "text-sm font-medium",
-                isActivePath(pathname, item.href)
+                !item.external && isActivePath(pathname, item.href)
                   ? "text-foreground"
                   : "text-muted-foreground"
               )}
             >
-              <a href={item.href}>{item.label}</a>
+              <a
+                href={item.href}
+                {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {item.label}
+              </a>
             </Button>
           ))}
         </nav>
@@ -186,6 +188,9 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
         <div className="flex items-center gap-2">
           <ThemeToggleButton />
           <div className="hidden items-center gap-1 sm:flex">
+            <SocialIconButton href={SOCIAL_LINKS.website} label="Unoplat Website">
+              <Globe className="size-4" />
+            </SocialIconButton>
             <SocialIconButton href={SOCIAL_LINKS.github} label="Unoplat on GitHub">
               <img
                 src="/images/social/github-mark.svg"
@@ -215,11 +220,8 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
               <SheetHeader className="space-y-1">
                 <SheetTitle className="flex items-center">
                   <a href="/" className="flex items-center text-foreground">
-          <img
-            src="/images/unoplat_logo.png"
-            alt="Unoplat Blog"
-            className="h-9 w-auto dark:brightness-180 dark:saturate-140"
-          />
+                    <img src="/images/unoplat-logo-light.svg" alt="Unoplat Blog" className="h-7 w-auto dark:hidden" />
+                    <img src="/images/unoplat-logo-dark.svg" alt="Unoplat Blog" className="hidden h-7 w-auto dark:block" />
                   </a>
                 </SheetTitle>
               </SheetHeader>
@@ -228,10 +230,15 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
                   <Button
                     key={item.href}
                     asChild
-                    variant={isActivePath(pathname, item.href) ? "secondary" : "ghost"}
+                    variant={!item.external && isActivePath(pathname, item.href) ? "secondary" : "ghost"}
                     className="justify-start"
                   >
-                    <a href={item.href}>{item.label}</a>
+                    <a
+                      href={item.href}
+                      {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      {item.label}
+                    </a>
                   </Button>
                 ))}
               </nav>
@@ -243,6 +250,9 @@ export function SiteHeader({ pathname }: SiteHeaderProps) {
                   Connect
                 </span>
                 <div className="flex flex-wrap gap-2">
+                  <SocialIconButton href={SOCIAL_LINKS.website} label="Unoplat Website">
+                    <Globe className="size-4" />
+                  </SocialIconButton>
                   <SocialIconButton href={SOCIAL_LINKS.github} label="Unoplat on GitHub">
                     <img
                       src="/images/social/github-mark.svg"
