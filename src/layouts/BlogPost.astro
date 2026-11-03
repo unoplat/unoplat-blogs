@@ -89,6 +89,8 @@ const { title, description, pubDate, updatedDate, heroImage, author, tags } = As
 
 				const slideData = (image: HTMLImageElement) => ({
 					src: image.currentSrc || image.src,
+					// Already-loaded inline image used as the placeholder during the open zoom animation.
+					msrc: image.currentSrc || image.src,
 					width: image.naturalWidth || Number(image.getAttribute('width')),
 					height: image.naturalHeight || Number(image.getAttribute('height')),
 					alt: image.alt,
@@ -99,6 +101,8 @@ const { title, description, pubDate, updatedDate, heroImage, author, tags } = As
 				const gallery = new PhotoSwipeLightbox({
 					dataSource,
 					pswpModule: () => import('photoswipe'),
+					// Plain mouse wheel / trackpad scroll zooms instead of panning.
+					wheelToZoom: true,
 				});
 				lightbox = gallery;
 				gallery.on('uiRegister', () => {
