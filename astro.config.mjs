@@ -5,9 +5,9 @@ import react from "@astrojs/react";
 import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import mermaid from "astro-mermaid";
-import photosuite from "photosuite";
+import { satteri } from "@astrojs/markdown-satteri";
 import { defineConfig } from "astro/config";
-import { remarkReadingTime } from "./remark-reading-time.mjs";
+import { satteriFigures } from "./src/plugins/satteri-figures.ts";
 
 // https://astro.build/config
 export default defineConfig({
@@ -64,14 +64,11 @@ export default defineConfig({
     mdx({ extendMarkdownConfig: true }),
     sitemap(),
     react(),
-    photosuite({
-      scope: ".prose",
-      glightbox: true,
-      imageAlts: true,
-    }),
   ],
   markdown: {
-    remarkPlugins: [remarkReadingTime],
+    // astro-mermaid emits raw `<pre class="mermaid">` HTML nodes; MDX on Sätteri
+    // only accepts them when raw HTML parsing is enabled.
+    processor: satteri({ features: { rawHtml: true }, hastPlugins: [satteriFigures] }),
   },
   vite: {
     plugins: [tailwindcss()],
