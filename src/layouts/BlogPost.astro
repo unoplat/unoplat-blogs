@@ -1,5 +1,5 @@
 ---
-import 'photosuite/dist/photosuite.css';
+import 'photoswipe/style.css';
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import AuthorCard from '@/components/AuthorCard.astro';
@@ -15,10 +15,9 @@ type Props = Omit<CollectionEntry<'blog'>['data'], 'author' | 'tags' | 'draft'> 
 	author?: CollectionEntry<'authors'> | undefined;
 	tags?: string[];
 	draft?: boolean;
-	minutesRead?: string;
 };
 
-const { title, description, pubDate, updatedDate, heroImage, author, tags, minutesRead } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, author, tags } = Astro.props;
 ---
 
 <html lang="en">
@@ -41,7 +40,6 @@ const { title, description, pubDate, updatedDate, heroImage, author, tags, minut
 						<span>
 							<FormattedDate date={pubDate} />
 						</span>
-						{minutesRead && <span>{minutesRead}</span>}
 						{updatedDate && (
 							<span class="text-muted-foreground/80">
 								Updated <FormattedDate date={updatedDate} />
@@ -66,5 +64,86 @@ const { title, description, pubDate, updatedDate, heroImage, author, tags, minut
 			</article>
 		</main>
 		<Footer />
+		<script>
+			import PhotoSwipeLightbox from 'photoswipe/lightbox';
+
+			let lightbox: PhotoSwipeLightbox | undefined;
+			let listeners: AbortController | undefined;
+
+			function cleanup() {
+				listeners?.abort();
+				lightbox?.destroy();
+				lightbox = undefined;
+			}
+
+			document.addEventListener('astro:before-swap', cleanup);
+			document.addEventListener('astro:page-load', () => {
+				cleanup();
+				listeners = new AbortController();
+				const { signal } = listeners;
+				const images = [...document.querySelectorAll<HTMLImageElement>('.prose img')].filter(
+					(image) => !image.closest('.mermaid, svg, .icon, [data-no-zoom]')
+						&& !/\.svg(?:[?#]|$)|^data:image\/svg|\/icons?\//i.test(image.currentSrc || image.src),
+				);
+				if (!images.length) return;
+
+				const slideData = (image: HTMLImageElement) => ({
+					src: image.currentSrc || image.src,
+					// Already-loaded inline image used as the placeholder during the open zoom animation.
+					msrc: image.currentSrc || image.src,
+					width: image.naturalWidth || Number(image.getAttribute('width')),
+					height: image.naturalHeight || Number(image.getAttribute('height')),
+					alt: image.alt,
+					caption: image.closest('figure')?.querySelector('figcaption')?.textContent?.trim() || image.alt,
+					element: image,
+				});
+				const dataSource = images.map(slideData);
+				const gallery = new PhotoSwipeLightbox({
+					dataSource,
+					pswpModule: () => import('photoswipe'),
+					// Plain mouse wheel / trackpad scroll zooms instead of panning.
+					wheelToZoom: true,
+				});
+				lightbox = gallery;
+				gallery.on('uiRegister', () => {
+					gallery.pswp?.ui?.registerElement({
+						name: 'caption',
+						appendTo: 'root',
+						onInit: (element, pswp) => {
+							const updateCaption = () => {
+								element.textContent = pswp.currSlide?.data.caption || '';
+								element.hidden = !element.textContent;
+							};
+							pswp.on('change', updateCaption);
+							updateCaption();
+						},
+					});
+				});
+				gallery.init();
+
+				images.forEach((image, index) => {
+					image.tabIndex = 0;
+					image.setAttribute('role', 'button');
+					image.setAttribute('aria-label', image.alt ? `Enlarge image: ${image.alt}` : 'Enlarge image');
+					image.dataset.zoomable = '';
+					const open = () => {
+						// Lazy images and responsive sources may have loaded since page-load.
+						dataSource.splice(0, dataSource.length, ...images.map(slideData));
+						image.focus();
+						gallery.loadAndOpen(index);
+					};
+					image.addEventListener('click', (event) => {
+						event.preventDefault();
+						open();
+					}, { signal });
+					image.addEventListener('keydown', (event) => {
+						if (event.key === 'Enter' || event.key === ' ') {
+							event.preventDefault();
+							open();
+						}
+					}, { signal });
+				});
+			});
+		</script>
 	</body>
 </html>
